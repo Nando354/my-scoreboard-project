@@ -1,0 +1,16 @@
+# Node modules
+my-scoreboard/node_modules
+my-scoreboard-server/node_modules
+
+# Environment variables
+.env
+
+# React build output
+my-scoreboard/build
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
