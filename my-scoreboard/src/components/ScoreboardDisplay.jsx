@@ -24,6 +24,7 @@ function ScoreboardDisplay({ socket, gameState }) {
   useEffect(() => {
     
     const handleKeyDown = (event) => {
+        console.log("Key pressed:", event.key); // <-- ADD THIS LINE
         // CRITICAL: Stop the browser/OS from performing the default action (e.g., changing system volume)
         event.preventDefault(); 
         
@@ -75,6 +76,10 @@ function ScoreboardDisplay({ socket, gameState }) {
   const leftTeamName = sidesSwapped ? 'GUEST' : 'HOME';
   const rightTeamName = sidesSwapped ? 'HOME' : 'GUEST';
 
+  // Logic to determine the underlying Team ID (A or B) based on side swaps
+  const teamAId = sidesSwapped ? 'B' : 'A';
+  const teamBId = sidesSwapped ? 'A' : 'B';
+
   return (
     <div className="scoreboard-container">
       {/* Status Bar / Game ID */}
@@ -88,15 +93,21 @@ function ScoreboardDisplay({ socket, gameState }) {
         
         {/* Left Team Panel (HOME/GUEST) */}
         <div className="team-panel team-left">
-          <h1 className="team-title">{leftTeamName}</h1>
-          <div className="score-value">
+          <h1 className="left-team-title">{leftTeamName}</h1>
+          <div className="left-score-value">
             {leftScore}
           </div>
           
           {/* Manual Control Buttons */}
           <div className="control-buttons">
-            <button onClick={() => sendScoreUpdate(sidesSwapped ? 'B' : 'A', 1)}>+</button>
-            <button onClick={() => sendScoreUpdate(sidesSwapped ? 'B' : 'A', -1)}>-</button>
+            <button 
+                onClick={() => sendScoreUpdate(teamAId, 1)}
+                disabled={status !== 'Live'}
+            >+</button>
+            <button 
+                onClick={() => sendScoreUpdate(teamAId, -1)}
+                disabled={status !== 'Live' || leftScore <= 0}
+            >-</button>
           </div>
         </div>
         
@@ -104,17 +115,33 @@ function ScoreboardDisplay({ socket, gameState }) {
         
         {/* Right Team Panel (GUEST/HOME) */}
         <div className="team-panel team-right">
-          <h1 className="team-title">{rightTeamName}</h1>
-          <div className="score-value">
+          <h1 className="right-team-title">{rightTeamName}</h1>
+          <div className="right-score-value">
             {rightScore}
           </div>
 
           {/* Manual Control Buttons */}
           <div className="control-buttons">
-            <button onClick={() => sendScoreUpdate(sidesSwapped ? 'A' : 'B', 1)}>+</button>
-            <button onClick={() => sendScoreUpdate(sidesSwapped ? 'A' : 'B', -1)}>-</button>
+            <button 
+                onClick={() => sendScoreUpdate(teamBId, 1)}
+                disabled={status !== 'Live'}
+            >+</button>
+            <button 
+                onClick={() => sendScoreUpdate(teamBId, -1)}
+                disabled={status !== 'Live' || rightScore <= 0}
+            >-</button>
           </div>
         </div>
+      </div>
+      {/* Global Controls */}
+      <div className="global-controls">
+        <button 
+            className="swap-button"
+            onClick={() => socket.emit('switch_sides_command', gameId)}
+            disabled={status !== 'Live'}
+        >
+            Swap Sides
+        </button>
       </div>
     </div>
   );

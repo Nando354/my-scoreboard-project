@@ -64,6 +64,7 @@ io.on('connection', (socket) => {
 
     // 2. JOIN GAME: Handles requests from clients (Display/Remote) joining an existing game
     socket.on('join_game', (gameId) => {
+        console.log(`Client ${socket.id} requested to join game: ${gameId}`);
         if (gameStates[gameId]) {
             socket.join(gameId); 
             console.log(`Client ${socket.id} joined room ${gameId}`);
@@ -76,9 +77,45 @@ io.on('connection', (socket) => {
     });
 
     // 3. (Future) UPDATE SCORE: Listener for score commands from the controls
-    socket.on('update_score_command', ({ gameId, team, change }) => {
-        // You'll add your score calculation and broadcast logic here later
-        console.log(`Received command for ${gameId}: ${team} ${change}`);
+    // Listener to handle score changes from the client buttons/remote
+    socket.on('update_score_command', (data) => {
+        console.log(`Received score update command:`, data);
+        const { gameId, team, change } = data;
+        const gameState = gameStates[gameId];
+        
+        if (!gameState) {
+            console.error(`Error: Game ID ${gameId} not found.`);
+            return;
+        }
+
+        // 1. Calculate the New Score
+        if (team === 'A') {
+            // Prevent negative score
+            gameState.scoreA = Math.max(0, gameState.scoreA + change);
+        } else if (team === 'B') {
+            // Prevent negative score
+            gameState.scoreB = Math.max(0, gameState.scoreB + change);
+        }
+
+        // 2. Broadcast the updated state to ALL clients in this room
+        // The clients will receive this via socket.on('score_updated', ...) in App.jsx
+        io.to(gameId).emit('score_updated', gameState);
+        
+        console.log(`Score updated for ${gameId}. New score: A:${gameState.scoreA} B:${gameState.scoreB}`);
+    });
+
+    // ... (Add listener for the switch sides command)
+    socket.on('switch_sides_command', (gameId) => {
+        const gameState = gameStates[gameId];
+
+        if (gameState) {
+            // Toggle the boolean flag
+            gameState.sidesSwapped = !gameState.sidesSwapped;
+            
+            // Broadcast the updated state
+            io.to(gameId).emit('score_updated', gameState);
+            console.log(`Sides swapped for ${gameId}.`);
+        }
     });
     
     socket.on('disconnect', () => {

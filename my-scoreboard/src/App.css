@@ -5,26 +5,32 @@
   text-align: center;
 }
 
-.homeTitle {
+.team-left {
   color: #1eff40;
-  font-size: 3.5rem;
-  margin-bottom: .2rem;
+  font-size: 1.5rem;
 }
 
-.homeCount {
-  font-size: 8rem;
-  color: #1eff40;
-  margin-bottom: 1rem;
+.left-team-title {
+  margin-bottom: 0.2rem;
 } 
 
-.guestTitle {
+.left-score-value {
+  font-size: 8rem;
+  color: #1eff40;
+  margin-bottom: .1rem;
+} 
+
+.team-right {
   color: #00f2ff;
-  font-size: 3.5rem;
-  margin-bottom: .2rem;
+  font-size: 1.5rem;
 }
 
-.guestCount {
+.right-team-title {
+  margin-bottom: 0.2rem;
+} 
+
+.right-score-value {
   font-size: 8rem;
   color: #00f2ff;
-  margin-bottom: 1rem;
+  margin-bottom: .1rem;
 }

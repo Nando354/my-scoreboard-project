@@ -58,6 +58,7 @@ function App() {
     
     // Primary Listener: Receive the authoritative state from the server
     socket.on('score_updated', (newState) => {
+        console.log("CLIENT RECEIVED NEW STATE:", newState);
         // Overwrite the local score state with the server's new, accurate data
         setGameState(prev => ({ 
             ...prev, 
@@ -69,6 +70,12 @@ function App() {
     socket.on('error_message', (message) => {
         setGameState(prev => ({ ...prev, status: `Error: ${message}` }));
     });
+
+    // --- Logic for when gameId changes ---
+    // If gameId is updated (e.g., exiting the Lobby), and the socket is connected, join the room.
+    if (gameState.gameId && socket.connected) {
+        socket.emit('join_game', gameState.gameId);
+    }
 
     // --- 5. Cleanup ---
     
