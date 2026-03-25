@@ -33,22 +33,22 @@ function ScoreboardDisplay({ socket, gameState }) {
 
         // Map the media key signals to specific commands
         switch (event.key) {
-            case 'AudioVolumeUp':
+            case '7': // Mapped from Volume Up
                 team = 'B'; change = 1; break;
-            case 'AudioVolumeDown':
+            case '8': // Mapped from Volume Down
                 team = 'B'; change = -1; break;
-            case 'MediaNextTrack':
+            case '9': // Mapped from Next Track
                 team = 'A'; change = 1; break;
-            case 'MediaPreviousTrack':
+            case '0': // Mapped from Previous Track
                 team = 'A'; change = -1; break;
-            case 'MediaPlayPause':
-                // Send the separate 'switch sides' command
+            case 'a': // Mapped from Play/Pause (Use lowercase for reliability)
+            case 'A': 
                 if (socket && gameId) {
                     socket.emit('switch_sides_command', gameId);
-                }
-                return; 
+              }
+              return;
             default:
-                return;
+              return;
         }
         
         // If a valid score command was mapped, send the update

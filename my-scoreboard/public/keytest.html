@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Android Key Test</title>
+</head>
+<body style="text-align: center; padding-top: 50px;">
+    <h1>Press a Button on Your Bluetooth Remote</h1>
+    <h2 id="keyOutput">Pressing...</h2>
+
+    <script>
+        document.addEventListener('keydown', function(event) {
+            // Display the key value and prevent default action for safety
+            document.getElementById('keyOutput').textContent = 
+                "Received Key: " + event.key + 
+                " | Code: " + event.code;
+            
+            // This is crucial: stop the browser from trying to handle the key
+            event.preventDefault(); 
+        });
+    </script>
+</body>
+</html>

@@ -7,8 +7,9 @@ import Lobby from './components/Lobby';
 import './App.css'; 
 
 // IMPORTANT: Define the server URL. Use 127.0.0.1 if you made the IPv4 change in server.js
-const SOCKET_SERVER_URL = "http://127.0.0.1:3000"; 
+// const SOCKET_SERVER_URL = "http://127.0.0.1:3000"; 
 // If you didn't change server.js to bind to 127.0.0.1, use: "http://localhost:3000"
+const SOCKET_SERVER_URL = "http://192.168.1.183:3000"; // <-- REPLACE WITH YOUR SERVER'S IP AND PORT
 
 function App() {
   

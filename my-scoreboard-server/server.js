@@ -15,7 +15,10 @@ const server = http.createServer(app);
 // (which runs on a different port, like 5173) to connect securely.
 const io = socketIo(server, {
     cors: {
-        origin: "http://localhost:5173", // Replace with your React development URL
+        origin: [
+            "http://localhost:5173", 
+            "http://192.168.1.183:5173" // <--- ADD THIS LINE
+        ], // Replace with your React development URL
         methods: ["GET", "POST"]
     }
 });
@@ -76,7 +79,7 @@ io.on('connection', (socket) => {
         }
     });
 
-    // 3. (Future) UPDATE SCORE: Listener for score commands from the controls
+    // 3. UPDATE SCORE: Listener for score commands from the controls
     // Listener to handle score changes from the client buttons/remote
     socket.on('update_score_command', (data) => {
         console.log(`Received score update command:`, data);
@@ -124,6 +127,11 @@ io.on('connection', (socket) => {
 });
 
 // 5. Start the server and listen for connections
-server.listen(PORT, '127.0.0.1', () => {
-    console.log(`Server listening on port ${PORT}`);
+// server.listen(PORT, '127.0.0.1', () => {
+//     console.log(`Server listening on port ${PORT}`);
+// });
+// 5. Start the server and listen for connections
+// Change '127.0.0.1' to '0.0.0.0' to allow connections from other devices (like your phone)
+server.listen(PORT, '0.0.0.0', () => {
+    console.log(`Server listening on http://0.0.0.0:${PORT}`);
 });
