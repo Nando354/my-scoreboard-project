@@ -10,7 +10,7 @@ const app = express();
 // Create an HTTP server instance from the Express app
 const server = http.createServer(app); 
 
-// 3. Initialize Socket.IO and attach it to the HTTP server
+// 3. Initialize Socket.IO and attach it to the HTTP server and React
 // The { cors } object is crucial for allowing your React frontend
 // (which runs on a different port, like 5173) to connect securely.
 const io = socketIo(server, {
@@ -27,12 +27,12 @@ const io = socketIo(server, {
 const PORT = process.env.PORT || 3000; 
 
 // 4. Basic Root Route (Optional)
-// This is just a test to ensure the HTTP server is running
+// This is just a test to ensure the HTTP server is running and responds
 app.get('/', (req, res) => {
     res.send('Scoreboard Server is running!');
 });
 
-// **Central Game State Storage**
+// **Central Game State Storage in a simple object**
 let gameStates = {}; 
 
 // Function to generate a simple Game ID (e.g., A5B9)
@@ -50,10 +50,12 @@ io.on('connection', (socket) => {
     socket.on('request_new_game', (callback) => {
         const gameId = generateGameId();
         
-        // Initialize the game state
+        // Initialize memory for the game state object with bracket notation since gameId is adynamic variable
         gameStates[gameId] = { 
             scoreA: 0, 
             scoreB: 0, 
+            teamAName: 'HOME',
+            teamBName: 'GUEST',
             sidesSwapped: false 
         }; 
         
@@ -91,7 +93,7 @@ io.on('connection', (socket) => {
             return;
         }
 
-        // 1. Calculate the New Score
+        // 1. Calculate the New Score so it can't be negative
         if (team === 'A') {
             // Prevent negative score
             gameState.scoreA = Math.max(0, gameState.scoreA + change);
@@ -120,6 +122,18 @@ io.on('connection', (socket) => {
             console.log(`Sides swapped for ${gameId}.`);
         }
     });
+
+    socket.on('update_names_command', (data) => {
+        const{ gameId, teamAName, teamBName } = data;
+        if (gameStates[gameId]) {
+            gameStates[gameId].teamAName = teamAName;
+            gameStates[gameId].teamBName = teamBName;
+            
+            // Broadcast the updated state to ALL clients in this room
+            io.to(gameId).emit('score_updated', gameStates[gameId]);
+            console.log(`Team names updated for ${gameId}. New names: A:${teamAName} B:${teamBName}`);
+        }
+    })
     
     socket.on('disconnect', () => {
         console.log(`Client disconnected: ${socket.id}`);

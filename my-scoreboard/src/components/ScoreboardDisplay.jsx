@@ -4,7 +4,7 @@ import React, { useEffect, useCallback } from 'react';
 
 // This component receives the socket connection and the entire gameState object from App.jsx
 function ScoreboardDisplay({ socket, gameState }) {
-  const { scoreA, scoreB, sidesSwapped, status, gameId } = gameState;
+  const { scoreA, scoreB, teamAName, teamBName, sidesSwapped, status, gameId } = gameState;
 
   // --- 1. Score Emitter Function ---
   // This is called by both the manual buttons and the Bluetooth key handler.
@@ -26,6 +26,12 @@ function ScoreboardDisplay({ socket, gameState }) {
     const handleKeyDown = (event) => {
         console.log("Key pressed:", event.key); // <-- ADD THIS LINE
         // CRITICAL: Stop the browser/OS from performing the default action (e.g., changing system volume)
+        // If the user is typing in ANY input or textarea, let the keys work normally as opposed to controlling the scoreboard (important for the team name inputs). This allows the media keys to control the scoreboard while still letting you type in the team names without interruption.
+        if (event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA') {
+            return; 
+        }
+
+        console.log("Key pressed:", event.key);
         event.preventDefault(); 
         
         let team = null;
@@ -73,10 +79,11 @@ function ScoreboardDisplay({ socket, gameState }) {
   const leftScore = sidesSwapped ? scoreB : scoreA;
   const rightScore = sidesSwapped ? scoreA : scoreB;
   
-  const leftTeamName = sidesSwapped ? 'GUEST' : 'HOME';
-  const rightTeamName = sidesSwapped ? 'HOME' : 'GUEST';
+  // Similarly, determine the team names for the left and right panels
+  const leftTeamName = sidesSwapped ? teamBName : teamAName;
+  const rightTeamName = sidesSwapped ? teamAName : teamBName;
 
-  // Logic to determine the underlying Team ID (A or B) based on side swaps
+  // Logic to determine the underlying Team ID (A or B) based on side swaps corresoponding to the physical buttons
   const teamAId = sidesSwapped ? 'B' : 'A';
   const teamBId = sidesSwapped ? 'A' : 'B';
 
@@ -93,7 +100,19 @@ function ScoreboardDisplay({ socket, gameState }) {
         
         {/* Left Team Panel (HOME/GUEST) */}
         <div className="team-panel team-left">
-          <h1 className="left-team-title">{leftTeamName}</h1>
+          <input 
+            className="team-name-input"
+            value={leftTeamName} 
+            onChange={(e) => {
+              const newName = e.target.value;
+              // We determine WHICH team is currently on the left to send the right update
+              const updateData = sidesSwapped 
+                ? { gameId, teamAName, teamBName: newName } 
+                : { gameId, teamAName: newName, teamBName };
+
+              socket.emit('update_names_command', updateData);
+            }}
+          />
           <div className="left-score-value">
             {leftScore}
           </div>
@@ -115,7 +134,20 @@ function ScoreboardDisplay({ socket, gameState }) {
         
         {/* Right Team Panel (GUEST/HOME) */}
         <div className="team-panel team-right">
-          <h1 className="right-team-title">{rightTeamName}</h1>
+          <input 
+            className="team-name-input"
+            value={rightTeamName} 
+            onChange={(e) => {
+              const newName = e.target.value;
+              // We determine WHICH team is currently on the right to send the right update
+              const updateData = sidesSwapped 
+                ? { gameId, teamAName: newName, teamBName } 
+                : { gameId, teamAName, teamBName: newName };
+
+              socket.emit('update_names_command', updateData);
+            }} 
+          />
+
           <div className="right-score-value">
             {rightScore}
           </div>

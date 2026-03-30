@@ -3,6 +3,7 @@
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+  background-color: #0f0202;
 }
 
 .team-left {
@@ -33,4 +34,34 @@
   font-size: 8rem;
   color: #00f2ff;
   margin-bottom: .1rem;
+}
+
+/* 1. Base style: Make it look like a Title, not a Box */
+.team-name-input {
+  background: transparent;
+  border: 2px solid transparent; /* Keeps layout stable */
+  color: #ece2e2;               /* Match your theme text color */
+  font-size: 2.5rem;            /* Make it big like an H1 */
+  font-weight: bold;
+  text-transform: uppercase;
+  text-align: center;
+  width: 100%;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;         /* Crucial: ensures it matches your app font */
+  padding: 5px;
+  outline: none;                /* Removes the default blue ring */
+}
+
+/* 2. Hover state: Subtle hint that it's editable */
+.team-name-input:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+/* 3. Focus state: Clear visual when actually typing */
+.team-name-input:focus {
+  background: rgba(255, 255, 255, 0.1);
+  border-bottom: 2px solid #00d4ff; /* Accent color under-line */
+  cursor: text;
 }
