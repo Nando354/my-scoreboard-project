@@ -96,6 +96,56 @@
   margin-top: 1rem;
 }
 
+/* Beach Warning Color (Sun/Sand Orange) */
+.switch-alert {
+  background-color: #ff8800 !important;
+  color: #000 !important;
+  font-size: 3rem !important;
+}
+
+.switch-alert h1 {
+  font-size: 5rem;
+  margin-bottom: 1rem;
+}
+
+.switch-overlay {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  color: black;
+  padding: 3rem;
+  border-radius: 30px;
+  box-shadow: 0 0 100px rgba(0,0,0,0.5);
+  z-index: 2000;  
+}
+
+/* Victory Theme (Gold/Celebration) */
+.game-over-theme {
+  background-color: #ffd700 !important;
+  color: #000 !important;
+  font-size: 10rem !important;
+}
+
+.winner-overlay {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: white;
+  color: black;
+  padding: 3rem;
+  border-radius: 30px;
+  box-shadow: 0 0 100px rgba(0,0,0,0.5);
+  z-index: 2000;
+}
+
+.winner-overlay h1 {
+  font-size: 12rem;
+  margin-bottom: 1rem;
+}
+
 /* Tablet & Landscape Mode: Flip to horizontal */
 @media screen and (min-width: 425px) and (orientation: landscape) {
   .scores-grid {

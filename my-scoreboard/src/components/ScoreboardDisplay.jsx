@@ -87,8 +87,38 @@ function ScoreboardDisplay({ socket, gameState }) {
   const teamAId = sidesSwapped ? 'B' : 'A';
   const teamBId = sidesSwapped ? 'A' : 'B';
 
+  //Beach Volleyball Scoreing and switching rules
+  const totalScore = scoreA + scoreB;
+  //Switch sides every 7 points but don't show if the game is already over
+  const isSwitchPoint = totalScore > 0 && totalScore % 7 === 0;
+
+  //Win Logic: At least 21 point And leading by at least 2 points
+  const winA = scoreA >= 21 && (scoreA -scoreB >= 2);
+  const winB = scoreB >= 21 && (scoreB -scoreA >= 2);
+  const isGameOver = winA || winB;
+
   return (
-    <div className="scoreboard-container">
+    /* Update the className to dynamically add 'switch-alert' or 'game-over' */
+    <div className={`scoreboard-container ${isSwitchPoint && !isGameOver ? 'switch-alert' : ''} ${isGameOver ? 'game-over' : ''}`}>
+      
+      {/* 1. SWITCH OVERLAY */}
+      {isSwitchPoint && !isGameOver && (
+        <div className="switch-overlay">
+          <h1>SWITCH SIDES</h1>
+          {/* <h1>{scoreA} - {scoreB}</h1> */}
+          <h1>Total Points: {totalScore}</h1>
+        </div>
+      )}
+
+      {/* 2. WINNER OVERLAY */}
+      {isGameOver && (
+        <div className="winner-overlay">
+          <h1>{winA ? teamAName : teamBName} WINS!</h1>
+          {/* <p>{scoreA} - {scoreB}</p> */}
+          <button onClick={() => window.location.reload()}>Reset Match</button>
+        </div>
+      )}
+
       {/* Status Bar / Game ID */}
       <header className={`status-bar status-${status.toLowerCase()}`}>
         <p>Game ID: **{gameId}**</p>
