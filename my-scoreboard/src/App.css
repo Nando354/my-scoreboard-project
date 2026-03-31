@@ -8,7 +8,7 @@
 
 .team-left {
   color: #1eff40;
-  font-size: 1.5rem;
+  font-size: 2rem;
 }
 
 .left-team-title {
@@ -16,14 +16,15 @@
 } 
 
 .left-score-value {
-  font-size: 8rem;
+  font-size: 12rem;
   color: #1eff40;
-  margin-bottom: .1rem;
+  margin-top: -5rem;
+  margin-bottom: -5rem;
 } 
 
 .team-right {
   color: #00f2ff;
-  font-size: 1.5rem;
+  font-size: 2rem;
 }
 
 .right-team-title {
@@ -31,9 +32,10 @@
 } 
 
 .right-score-value {
-  font-size: 8rem;
+  font-size: 12rem;
   color: #00f2ff;
-  margin-bottom: .1rem;
+  margin-top: -5rem;
+  margin-bottom: -5rem;
 }
 
 /* 1. Base style: Make it look like a Title, not a Box */
@@ -41,7 +43,7 @@
   background: transparent;
   border: 2px solid transparent; /* Keeps layout stable */
   color: #ece2e2;               /* Match your theme text color */
-  font-size: 2.5rem;            /* Make it big like an H1 */
+  font-size: 4.5rem;            /* Make it big like an H1 */
   font-weight: bold;
   text-transform: uppercase;
   text-align: center;
@@ -64,4 +66,95 @@
   background: rgba(255, 255, 255, 0.1);
   border-bottom: 2px solid #00d4ff; /* Accent color under-line */
   cursor: text;
+}
+
+/* This container holds both Team Panels */
+.scores-grid {
+  display: flex;
+  flex-direction: column; /* Stacked (Vertical) by default */
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+  width: 100%;
+}
+
+.control-buttons {
+  margin-top: 2rem;
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.swap-button {
+  background-color: hsl(129, 24%, 94%);
+  color: #0f0202;
+  border: none;
+  padding: 0.5rem 1rem;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin-top: 1rem;
+}
+
+/* Tablet & Landscape Mode: Flip to horizontal */
+@media screen and (min-width: 425px) and (orientation: landscape) {
+  .scores-grid {
+    flex-direction: row; /* Side-by-side (Horizontal) */
+    justify-content: space-around;
+  }
+  
+  /* Make the scores a bit smaller in landscape so they fit */
+  .left-score-value, .right-score-value {
+    font-size: 14rem; 
+  }
+}
+
+@media screen and (min-width: 960px) and (orientation: landscape) {
+  .scores-grid {
+    flex-direction: row; /* Side-by-side (Horizontal) */
+    justify-content: space-around;
+  }
+  
+  /* Make the scores a bit smaller in landscape so they fit */
+  .left-score-value, .right-score-value {
+    font-size: 30rem; 
+  }
+
+  .team-name-input {
+  font-size: 8.5rem; 
+  }
+  .right-score-value {
+  margin-top: -10rem;
+  margin-bottom: -5rem;
+  }
+
+  .left-score-value {
+  margin-top: -10rem;
+  margin-bottom: -5rem;
+  }
+}
+
+@media screen and (min-width: 711px) and (orientation: portrait) {
+  /* .scores-grid {
+    flex-direction: row; 
+    justify-content: space-around;
+  } */
+  
+  /* Make the scores a bit smaller in landscape so they fit */
+  .left-score-value, .right-score-value {
+    font-size: 25rem; 
+  }
+
+  .team-name-input {
+  font-size: 8.5rem; 
+  }
+  .right-score-value {
+  margin-top: -10rem;
+  margin-bottom: -5rem;
+  }
+
+  .left-score-value {
+  margin-top: -10rem;
+  margin-bottom: -5rem;
+  }
 }
