@@ -6,6 +6,14 @@
   background-color: #0f0202;
 }
 
+.lobby-section, .lobby-container {
+  color: #ece2e2;
+}
+
+.lobby-section h2 {
+  color: #ece2e2;
+}
+
 .team-left {
   color: #1eff40;
   font-size: 2rem;
@@ -96,7 +104,7 @@
   margin-top: 1rem;
 }
 
-/* Beach Warning Color (Sun/Sand Orange) */
+/* Beach Switch Sides Warning Color (Sun/Sand Orange) */
 .switch-alert {
   background-color: #ff8800 !important;
   color: #000 !important;
@@ -104,7 +112,7 @@
 }
 
 .switch-alert h1 {
-  font-size: 5rem;
+  font-size: 7rem;
   margin-bottom: 1rem;
 }
 
@@ -113,7 +121,8 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: white;
+  background: rgba(255, 255, 255, 0.2); /* 0.7 is 70% visible, 0.3 is 30%, etc. */
+  backdrop-filter: blur(10px);
   color: black;
   padding: 3rem;
   border-radius: 30px;
@@ -133,8 +142,9 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: white;
-  color: black;
+  background: rgba(255, 255, 255, 0.2); /* 0.7 is 70% visible, 0.3 is 30%, etc. */
+  backdrop-filter: blur(10px);
+  color: rgb(246, 69, 46);
   padding: 3rem;
   border-radius: 30px;
   box-shadow: 0 0 100px rgba(0,0,0,0.5);
@@ -146,7 +156,7 @@
   margin-bottom: 1rem;
 }
 
-/* Tablet & Landscape Mode: Flip to horizontal */
+/* Phone & Landscape Mode: Flip to horizontal */
 @media screen and (min-width: 425px) and (orientation: landscape) {
   .scores-grid {
     flex-direction: row; /* Side-by-side (Horizontal) */
@@ -157,6 +167,20 @@
   .left-score-value, .right-score-value {
     font-size: 14rem; 
   }
+
+  .switch-alert h1 {
+  font-size: 3rem;
+  margin-bottom: -2rem;
+}
+}
+
+@media screen and (min-width: 325px) and (orientation: portrait) {
+  .switch-alert h1 {
+    font-size: 3rem;
+  }
+  .winner-overlay h1 {
+  font-size: 6rem;
+}
 }
 
 @media screen and (min-width: 960px) and (orientation: landscape) {

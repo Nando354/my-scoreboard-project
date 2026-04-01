@@ -4,7 +4,7 @@ import React, { useEffect, useCallback } from 'react';
 
 // This component receives the socket connection and the entire gameState object from App.jsx
 function ScoreboardDisplay({ socket, gameState }) {
-  const { scoreA, scoreB, teamAName, teamBName, sidesSwapped, status, gameId } = gameState;
+  const { scoreA, scoreB, teamAName, teamBName, sidesSwapped, status, gameId, lastSwitchedAt } = gameState;
 
   // --- 1. Score Emitter Function ---
   // This is called by both the manual buttons and the Bluetooth key handler.
@@ -74,7 +74,7 @@ function ScoreboardDisplay({ socket, gameState }) {
 
 
   // --- 3. Display Logic ---
-
+  
   // Determine which score belongs on the left and right based on the 'sidesSwapped' flag
   const leftScore = sidesSwapped ? scoreB : scoreA;
   const rightScore = sidesSwapped ? scoreA : scoreB;
@@ -89,14 +89,15 @@ function ScoreboardDisplay({ socket, gameState }) {
 
   //Beach Volleyball Scoreing and switching rules
   const totalScore = scoreA + scoreB;
-  //Switch sides every 7 points but don't show if the game is already over
-  const isSwitchPoint = totalScore > 0 && totalScore % 7 === 0;
+  // UPDATED: Only show if it's a multiple of 7 AND we haven't manually swapped at this score yet
+  const isSwitchPoint = totalScore > 0 && totalScore % 7 === 0 && lastSwitchedAt !== totalScore;
 
   //Win Logic: At least 21 point And leading by at least 2 points
   const winA = scoreA >= 21 && (scoreA -scoreB >= 2);
   const winB = scoreB >= 21 && (scoreB -scoreA >= 2);
-  const isGameOver = winA || winB;
-
+  // UPDATED: Win Logic (at least 21 AND leading by 2)
+  const isGameOver = (scoreA >= 21 || scoreB >= 21) && Math.abs(scoreA - scoreB) >= 2;
+  
   return (
     /* Update the className to dynamically add 'switch-alert' or 'game-over' */
     <div className={`scoreboard-container ${isSwitchPoint && !isGameOver ? 'switch-alert' : ''} ${isGameOver ? 'game-over' : ''}`}>
@@ -115,7 +116,12 @@ function ScoreboardDisplay({ socket, gameState }) {
         <div className="winner-overlay">
           <h1>{winA ? teamAName : teamBName} WINS!</h1>
           {/* <p>{scoreA} - {scoreB}</p> */}
-          <button onClick={() => window.location.reload()}>Reset Match</button>
+          <button 
+            className="reset-set-button"
+            onClick={() => socket.emit('switch_sides_command', gameId)}
+          >
+            Start New Set (Clear Scores)
+          </button>
         </div>
       )}
 

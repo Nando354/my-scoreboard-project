@@ -56,7 +56,8 @@ io.on('connection', (socket) => {
             scoreB: 0, 
             teamAName: 'HOME',
             teamBName: 'GUEST',
-            sidesSwapped: false 
+            sidesSwapped: false,
+            lastSwitchedAt: 0 // Added for your 7-point tracking
         }; 
         
         // Join the room and send the new ID back via callback
@@ -114,9 +115,27 @@ io.on('connection', (socket) => {
         const gameState = gameStates[gameId];
 
         if (gameState) {
-            // Toggle the boolean flag
-            gameState.sidesSwapped = !gameState.sidesSwapped;
-            
+            const { scoreA, scoreB } = gameState;
+            const totalScore = scoreA + scoreB; // Added for your 7-point tracking
+        
+            // Check if someone has already won (Beach Volley rules)
+            const winA = scoreA >= 21 && (scoreA - scoreB >= 2);
+            const winB = scoreB >= 21 && (scoreB - scoreA >= 2);
+            const isGameOver = winA || winB;
+
+            if (isGameOver) {
+                // 2. If game is over: Reset scores to 0, but DO NOT toggle sidesSwapped
+                gameState.scoreA = 0;
+                gameState.scoreB = 0;
+                gameState.lastSwitchedAt = 0; // Reset your 7-point tracker
+                console.log(`Game ${gameId} reset for new set (Sides stayed same).`);
+            } else {
+                // 3. If game is NOT over: Toggle the sides normally
+                gameState.sidesSwapped = !gameState.sidesSwapped;
+                gameState.lastSwitchedAt = totalScore; 
+                console.log(`Sides swapped for ${gameId}.`);
+            }
+
             // Broadcast the updated state
             io.to(gameId).emit('score_updated', gameState);
             console.log(`Sides swapped for ${gameId}.`);
