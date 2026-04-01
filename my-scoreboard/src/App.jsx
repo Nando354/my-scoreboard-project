@@ -12,7 +12,7 @@ import './App.css';
 // const SOCKET_SERVER_URL = "http://192.168.1.183:3000"; // <-- REPLACE WITH YOUR SERVER'S IP AND PORT
 const SOCKET_SERVER_URL = window.location.hostname === "localhost" 
   ? "http://localhost:3000" 
-  : "https://your-unique-service-name.onrender.com"; // <-- Update this!
+  : "https://my-scoreboard-project.onrender.com"; // <-- Update this!
 
 function App() {
   
