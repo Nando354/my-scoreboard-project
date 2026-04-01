@@ -6,16 +6,90 @@
   background-color: #0f0202;
 }
 
+/* Status Bar */
+
+.status-bar {
+  color: rgba(30, 255, 64, 0.4);
+  font-size: .5rem;
+  position: absolute;
+  bottom: 0px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 9999;
+}
+
+/* lobby */
+
 .lobby-section, .lobby-container {
   color: #ece2e2;
 }
 
-.lobby-section h2 {
-  color: #ece2e2;
+/* Scoreboard */
+/* Hamburger Menu */
+.scoreboard-container {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+}
+
+.hamburger-wrapper {
+  position: absolute; /* Stays in the corner even if scrolling happens */
+  top: 0px;
+  right: 20px;
+  z-index: 9999;   /* High enough to beat overlays */
+}
+
+.hamburger-icon {
+  background: transparent;    /* Remove the circle background */
+  border: none;               /* Remove the border */
+  color: rgba(30, 255, 64, 0.4); /* Neon green at 40% opacity */
+  font-size: 1.5rem;            /* Make it large enough to tap easily */
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.3s ease, transform 0.2s ease;
+  padding: 0;
+  outline: none;
+}
+
+/* Make it pop when you hover or tap it */
+.hamburger-icon:hover, .hamburger-icon:active {
+  color: rgb(10, 128, 28); /* Full brightness on interaction */
+  transform: scale(1);       /* Slight grow effect */
+}
+
+.menu-dropdown {
+  position: absolute;
+  top: 60px;
+  right: 0;
+  background: #1a1a1a;
+  border: 1px solid #444;
+  padding: 1rem;
+  border-radius: 8px;
+  min-width: 180px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: white;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+/* Scoreboard Continued*/
+.team-left, .team-left .left-score-value {
+  color: #1eff40;
+}
+
+.team-right, .team-right .right-score-value {
+  color: #00f2ff;
 }
 
 .team-left {
-  color: #1eff40;
   font-size: 2rem;
 }
 
@@ -23,15 +97,14 @@
   margin-bottom: 0.2rem;
 } 
 
-.left-score-value {
+.left-score-value, .right-score-value {
   font-size: 12rem;
-  color: #1eff40;
   margin-top: -5rem;
   margin-bottom: -5rem;
-} 
+  color: inherit; /* This tells the number to use the parent's color */
+}
 
 .team-right {
-  color: #00f2ff;
   font-size: 2rem;
 }
 
@@ -39,12 +112,6 @@
   margin-bottom: 0.2rem;
 } 
 
-.right-score-value {
-  font-size: 12rem;
-  color: #00f2ff;
-  margin-top: -5rem;
-  margin-bottom: -5rem;
-}
 
 /* 1. Base style: Make it look like a Title, not a Box */
 .team-name-input {
@@ -158,6 +225,19 @@
 
 /* Phone & Landscape Mode: Flip to horizontal */
 @media screen and (min-width: 425px) and (orientation: landscape) {
+  .status-bar {
+    color: rgba(30, 255, 64, 0.4);
+    font-size: .5rem;
+    position: absolute;
+    bottom: 0px;
+    left: 23%;
+    transform: translateX(-50%);
+    z-index: 9999;
+  }
+
+  .hamburger-icon {
+    font-size: 1.5rem; /* Slightly smaller on landscape phones */
+  }
   .scores-grid {
     flex-direction: row; /* Side-by-side (Horizontal) */
     justify-content: space-around;

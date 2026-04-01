@@ -1,14 +1,42 @@
 // src/components/ScoreboardDisplay.jsx
 
-import React, { useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 // This component receives the socket connection and the entire gameState object from App.jsx
 function ScoreboardDisplay({ socket, gameState }) {
-  const { scoreA, scoreB, teamAName, teamBName, sidesSwapped, status, gameId, lastSwitchedAt } = gameState;
+  //Add menu and buttons visibility state
+  const [showButtons, setShowButtons] = useState(true);
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  // Destructure the gameState for easier access to individual properties
+  const { 
+    scoreA = 0, 
+    scoreB = 0, 
+    teamAName = '',  // <--- Use '' instead of letting it be undefined
+    teamBName = '',  // <--- Use '' instead of letting it be undefined
+    sidesSwapped = false, 
+    status = '', 
+    gameId = '',
+    lastSwitchedAt = 0
+  } = gameState || {}; // The || {} ensures we don't crash if gameState is null
+
+  //Beach Volleyball Scoreing and switching rules
+  const totalScore = scoreA + scoreB;
+  //Only show if it's a multiple of 7 AND we haven't manually swapped at this score yet
+  const isSwitchPoint = totalScore > 0 && totalScore % 7 === 0 && lastSwitchedAt !== totalScore;
+  // UPDATED: Win Logic (at least 21 AND leading by 2)
+  const isGameOver = (scoreA >= 21 || scoreB >= 21) && Math.abs(scoreA - scoreB) >= 2;
 
   // --- 1. Score Emitter Function ---
   // This is called by both the manual buttons and the Bluetooth key handler.
   const sendScoreUpdate = useCallback((team, change) => {
+    // 1. New "Lock" Logic:
+    // If the switch alert is up or the game is over, exit the function immediately
+    if (isSwitchPoint || isGameOver) {
+        console.log("Scoring locked! Clear the overlay first.");
+        return;
+    }
+
     if (!socket || !gameId) {
         console.error("Socket not ready or Game ID missing! Cannot send command.");
         return;
@@ -16,7 +44,7 @@ function ScoreboardDisplay({ socket, gameState }) {
 
     // Send the structured command via Socket.IO
     socket.emit('update_score_command', { gameId, team, change });
-  }, [socket, gameId]);
+  }, [socket, gameId, isSwitchPoint, isGameOver]);
 
 
   // --- 2. Bluetooth (Keyboard) Handler ---
@@ -87,20 +115,34 @@ function ScoreboardDisplay({ socket, gameState }) {
   const teamAId = sidesSwapped ? 'B' : 'A';
   const teamBId = sidesSwapped ? 'A' : 'B';
 
-  //Beach Volleyball Scoreing and switching rules
-  const totalScore = scoreA + scoreB;
-  // UPDATED: Only show if it's a multiple of 7 AND we haven't manually swapped at this score yet
-  const isSwitchPoint = totalScore > 0 && totalScore % 7 === 0 && lastSwitchedAt !== totalScore;
-
   //Win Logic: At least 21 point And leading by at least 2 points
   const winA = scoreA >= 21 && (scoreA -scoreB >= 2);
   const winB = scoreB >= 21 && (scoreB -scoreA >= 2);
-  // UPDATED: Win Logic (at least 21 AND leading by 2)
-  const isGameOver = (scoreA >= 21 || scoreB >= 21) && Math.abs(scoreA - scoreB) >= 2;
-  
+
   return (
     /* Update the className to dynamically add 'switch-alert' or 'game-over' */
     <div className={`scoreboard-container ${isSwitchPoint && !isGameOver ? 'switch-alert' : ''} ${isGameOver ? 'game-over' : ''}`}>
+      {/* Floating Hamburger Menu */}
+      <div className="hamburger-wrapper">
+        <button className="hamburger-icon" onClick={() => setMenuOpen(!menuOpen)}>
+          ☰
+        </button>
+        {menuOpen && (
+          <div className="menu-dropdown">
+            <label className="menu-item">
+              <input 
+                type="checkbox" 
+                checked={showButtons} 
+                onChange={() => {
+                  setShowButtons(!showButtons); // 1. Toggle the buttons
+                  setMenuOpen(false);           // 2. Hide the menu automatically
+                }} 
+              />
+              Show Control Buttons
+            </label>
+          </div>
+        )}
+      </div>
       
       {/* 1. SWITCH OVERLAY */}
       {isSwitchPoint && !isGameOver && (
@@ -124,18 +166,12 @@ function ScoreboardDisplay({ socket, gameState }) {
           </button>
         </div>
       )}
-
-      {/* Status Bar / Game ID */}
-      <header className={`status-bar status-${status.toLowerCase()}`}>
-        <p>Game ID: **{gameId}**</p>
-        <p>Connection Status: **{status}**</p>
-      </header>
       
       {/* Main Score Display */}
       <div className="scores-grid">
         
         {/* Left Team Panel (HOME/GUEST) */}
-        <div className="team-panel team-left">
+        <div className={`team-panel ${sidesSwapped ? 'team-right' : 'team-left'}`}>
           <input 
             className="team-name-input"
             value={leftTeamName} 
@@ -154,22 +190,24 @@ function ScoreboardDisplay({ socket, gameState }) {
           </div>
           
           {/* Manual Control Buttons */}
-          <div className="control-buttons">
-            <button 
-                onClick={() => sendScoreUpdate(teamAId, 1)}
-                disabled={status !== 'Live'}
-            >+</button>
-            <button 
-                onClick={() => sendScoreUpdate(teamAId, -1)}
-                disabled={status !== 'Live' || leftScore <= 0}
-            >-</button>
-          </div>
+          {showButtons && (
+            <div className="control-buttons">
+              <button 
+                  onClick={() => sendScoreUpdate(teamAId, 1)}
+                  disabled={status !== 'Live' || isSwitchPoint || isGameOver}
+              >+</button>
+              <button 
+                  onClick={() => sendScoreUpdate(teamAId, -1)}
+                  disabled={status !== 'Live' || leftScore <= 0 || isSwitchPoint || isGameOver}
+              >-</button>
+            </div>
+          )}
         </div>
         
         <div className="separator-line"></div>
         
         {/* Right Team Panel (GUEST/HOME) */}
-        <div className="team-panel team-right">
+        <div className={`team-panel ${sidesSwapped ? 'team-left' : 'team-right'}`}>
           <input 
             className="team-name-input"
             value={rightTeamName} 
@@ -189,28 +227,36 @@ function ScoreboardDisplay({ socket, gameState }) {
           </div>
 
           {/* Manual Control Buttons */}
-          <div className="control-buttons">
-            <button 
-                onClick={() => sendScoreUpdate(teamBId, 1)}
-                disabled={status !== 'Live'}
-            >+</button>
-            <button 
-                onClick={() => sendScoreUpdate(teamBId, -1)}
-                disabled={status !== 'Live' || rightScore <= 0}
-            >-</button>
-          </div>
+          {showButtons && (
+            <div className="control-buttons">
+              <button 
+                  onClick={() => sendScoreUpdate(teamBId, 1)}
+                  disabled={status !== 'Live' || isSwitchPoint || isGameOver}
+              >+</button>
+              <button 
+                  onClick={() => sendScoreUpdate(teamBId, -1)}
+                  disabled={status !== 'Live' || rightScore <= 0 || isSwitchPoint || isGameOver}
+              >-</button>
+            </div>
+          )}
         </div>
       </div>
       {/* Global Controls */}
-      <div className="global-controls">
-        <button 
-            className="swap-button"
-            onClick={() => socket.emit('switch_sides_command', gameId)}
-            disabled={status !== 'Live'}
-        >
-            Swap Sides
-        </button>
-      </div>
+      {showButtons && (
+        <div className="global-controls">
+          <button 
+              className="swap-button"
+              onClick={() => socket.emit('switch_sides_command', gameId)}
+              disabled={status !== 'Live'}
+          >
+              Swap Sides
+          </button>
+        </div>
+      )}
+      {/* Status Bar / Game ID */}
+      <header className={`status-bar status-${status.toLowerCase()}`}>
+        <p>Game ID: **{gameId}** **{status}**</p>
+      </header>
     </div>
   );
 }
