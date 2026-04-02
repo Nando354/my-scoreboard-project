@@ -191,15 +191,15 @@ function ScoreboardDisplay({ socket, gameState }) {
           
           {/* Manual Control Buttons */}
           {showButtons && (
-            <div className="control-buttons">
-              <button 
-                  onClick={() => sendScoreUpdate(teamAId, 1)}
-                  disabled={status !== 'Live' || isSwitchPoint || isGameOver}
-              >+</button>
+            <div className="control-buttons">  
               <button 
                   onClick={() => sendScoreUpdate(teamAId, -1)}
                   disabled={status !== 'Live' || leftScore <= 0 || isSwitchPoint || isGameOver}
               >-</button>
+              <button 
+                  onClick={() => sendScoreUpdate(teamAId, 1)}
+                  disabled={status !== 'Live' || isSwitchPoint || isGameOver}
+              >+</button>
             </div>
           )}
         </div>
@@ -230,13 +230,13 @@ function ScoreboardDisplay({ socket, gameState }) {
           {showButtons && (
             <div className="control-buttons">
               <button 
-                  onClick={() => sendScoreUpdate(teamBId, 1)}
-                  disabled={status !== 'Live' || isSwitchPoint || isGameOver}
-              >+</button>
-              <button 
                   onClick={() => sendScoreUpdate(teamBId, -1)}
                   disabled={status !== 'Live' || rightScore <= 0 || isSwitchPoint || isGameOver}
               >-</button>
+              <button 
+                  onClick={() => sendScoreUpdate(teamBId, 1)}
+                  disabled={status !== 'Live' || isSwitchPoint || isGameOver}
+              >+</button>
             </div>
           )}
         </div>
