@@ -1,7 +1,7 @@
 #root {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 2rem;
+  padding: .2rem;
   text-align: center;
   background-color: #0f0202;
 }
@@ -10,13 +10,18 @@
 
 .status-bar {
   color: rgba(30, 255, 64, 0.4);
-  font-size: .5rem;
+  font-size: .9rem;
   position: absolute;
-  bottom: 0px;
-  left: 50%;
+  top: 10px;
+  left: 13%;
   transform: translateX(-50%);
   z-index: 9999;
 }
+
+.status-bar p {
+  margin: 0rem;
+  padding: 0rem;
+} 
 
 /* lobby */
 
@@ -149,26 +154,27 @@
   flex-direction: column; /* Stacked (Vertical) by default */
   align-items: center;
   justify-content: center;
-  gap: 2rem;
+  gap: 1rem;
   width: 100%;
 }
 
 .control-buttons {
   margin-top: 2rem;
   display: flex;
+  font-size: .8em;
   gap: 1rem;
   justify-content: center;
 }
 
 .swap-button {
-  background-color: hsl(129, 24%, 94%);
+  background-color: hsl(44, 94%, 51%);
   color: #0f0202;
   border: none;
   padding: 0.5rem 1rem;
   font-size: 1.2rem;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  margin-top: 1rem;
+  margin-top: 1.5rem;
 }
 
 /* Beach Switch Sides Warning Color (Sun/Sand Orange) */
@@ -227,10 +233,10 @@
 @media screen and (min-width: 425px) and (orientation: landscape) {
   .status-bar {
     color: rgba(30, 255, 64, 0.4);
-    font-size: .5rem;
+    font-size: .9rem;
     position: absolute;
-    bottom: 0px;
-    left: 23%;
+    top: 10px;
+    left: 50%;
     transform: translateX(-50%);
     z-index: 9999;
   }
@@ -241,6 +247,7 @@
   .scores-grid {
     flex-direction: row; /* Side-by-side (Horizontal) */
     justify-content: space-around;
+    gap: 0rem;
   }
   
   /* Make the scores a bit smaller in landscape so they fit */
@@ -248,10 +255,15 @@
     font-size: 14rem; 
   }
 
+  .swap-button {
+
+    margin-top: 0rem;
+  }
+
   .switch-alert h1 {
-  font-size: 3rem;
-  margin-bottom: -2rem;
-}
+    font-size: 3rem;
+    margin-bottom: -2rem;
+  }
 }
 
 @media screen and (min-width: 325px) and (orientation: portrait) {

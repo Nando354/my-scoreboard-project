@@ -122,6 +122,14 @@ function ScoreboardDisplay({ socket, gameState }) {
   return (
     /* Update the className to dynamically add 'switch-alert' or 'game-over' */
     <div className={`scoreboard-container ${isSwitchPoint && !isGameOver ? 'switch-alert' : ''} ${isGameOver ? 'game-over' : ''}`}>
+
+      {/* Status Bar / Game ID */}
+      <header className={`status-bar status-${status.toLowerCase()}`}>
+        <p>Game ID</p>
+        <p>{gameId}</p>
+        <p>{status}</p>
+      </header>
+
       {/* Floating Hamburger Menu */}
       <div className="hamburger-wrapper">
         <button className="hamburger-icon" onClick={() => setMenuOpen(!menuOpen)}>
@@ -206,6 +214,19 @@ function ScoreboardDisplay({ socket, gameState }) {
         
         <div className="separator-line"></div>
         
+        {/* Global Controls */}
+          {showButtons && (
+            <div className="global-controls">
+              <button 
+                  className="swap-button"
+                  onClick={() => socket.emit('switch_sides_command', gameId)}
+                  disabled={status !== 'Live'}
+              >
+                  Swap Sides
+              </button>
+            </div>
+          )}
+        
         {/* Right Team Panel (GUEST/HOME) */}
         <div className={`team-panel ${sidesSwapped ? 'team-left' : 'team-right'}`}>
           <input 
@@ -239,24 +260,11 @@ function ScoreboardDisplay({ socket, gameState }) {
               >+</button>
             </div>
           )}
+          
         </div>
       </div>
-      {/* Global Controls */}
-      {showButtons && (
-        <div className="global-controls">
-          <button 
-              className="swap-button"
-              onClick={() => socket.emit('switch_sides_command', gameId)}
-              disabled={status !== 'Live'}
-          >
-              Swap Sides
-          </button>
-        </div>
-      )}
-      {/* Status Bar / Game ID */}
-      <header className={`status-bar status-${status.toLowerCase()}`}>
-        <p>Game ID: **{gameId}** **{status}**</p>
-      </header>
+      
+      
     </div>
   );
 }
