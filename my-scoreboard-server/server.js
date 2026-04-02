@@ -17,7 +17,8 @@ const io = socketIo(server, {
     cors: {
         origin: [
             "http://localhost:5173", 
-            "http://192.168.1.183:5173" // <--- ADD THIS LINE
+            "http://192.168.1.183:5173", // <--- ADD THIS LINE
+            "https://onrender.com"
         ], // Replace with your React development URL
         methods: ["GET", "POST"]
     }
@@ -111,7 +112,9 @@ io.on('connection', (socket) => {
     });
 
     // ... (Add listener for the switch sides command)
-    socket.on('switch_sides_command', (gameId) => {
+    socket.on('switch_sides_command', (data) => {
+        const gameId =  typeof data === 'string' ? data : data.gameId; // Handle both string and object formats
+        const isPortrait = data.isPortrait || false; // Default to false if not provided
         const gameState = gameStates[gameId];
 
         if (gameState) {
@@ -130,10 +133,16 @@ io.on('connection', (socket) => {
                 gameState.lastSwitchedAt = 0; // Reset your 7-point tracker
                 console.log(`Game ${gameId} reset for new set (Sides stayed same).`);
             } else {
-                // 3. If game is NOT over: Toggle the sides normally
-                gameState.sidesSwapped = !gameState.sidesSwapped;
+                // ONLY swap the sides if the user is NOT in portrait mode
+                if (!isPortrait) {
+                    gameState.sidesSwapped = !gameState.sidesSwapped;
+                    console.log(`Sides swapped for ${gameId}.`);
+                } else {
+                    console.log(`Portrait mode detected: Overlay cleared, sides NOT swapped.`);
+                }
+                
+                // ALWAYS update this so the 7-point overlay disappears
                 gameState.lastSwitchedAt = totalScore; 
-                console.log(`Sides swapped for ${gameId}.`);
             }
 
             // Broadcast the updated state
@@ -165,6 +174,9 @@ io.on('connection', (socket) => {
 // });
 // 5. Start the server and listen for connections
 // Change '127.0.0.1' to '0.0.0.0' to allow connections from other devices (like your phone)
-server.listen(PORT, '0.0.0.0', () => {
-    console.log(`Server listening on http://0.0.0.0:${PORT}`);
+// server.listen(PORT, '0.0.0.0', () => {
+//     console.log(`Server listening on http://0.0.0.0:${PORT}`);
+// });
+server.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
 });

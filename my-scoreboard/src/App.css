@@ -166,6 +166,10 @@
   justify-content: center;
 }
 
+.control-buttons button {
+  background-color: #ece2e2;
+}
+
 .swap-button {
   background-color: hsl(44, 94%, 51%);
   color: #0f0202;
@@ -175,6 +179,8 @@
   cursor: pointer;
   transition: background-color 0.3s ease;
   margin-top: 1.5rem;
+  position: relative;
+  z-index: 2501; /* Above the status bar and overlays */
 }
 
 /* Beach Switch Sides Warning Color (Sun/Sand Orange) */
@@ -182,20 +188,26 @@
   background-color: #ff8800 !important;
   color: #000 !important;
   font-size: 3rem !important;
+  margin-bottom: 2rem;
+}
+
+.switch-alert h2 {
+  font-size: 3rem;
+  margin-bottom: 12rem;
 }
 
 .switch-alert h1 {
-  font-size: 7rem;
-  margin-bottom: 1rem;
+  font-size: 6rem;
+  margin-top: 2rem;
 }
 
 .switch-overlay {
   position: fixed;
-  top: 50%;
+  top: 45%;
   left: 50%;
   transform: translate(-50%, -50%);
   background: rgba(255, 255, 255, 0.2); /* 0.7 is 70% visible, 0.3 is 30%, etc. */
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(4px);
   color: black;
   padding: 3rem;
   border-radius: 30px;
@@ -221,7 +233,7 @@
   padding: 3rem;
   border-radius: 30px;
   box-shadow: 0 0 100px rgba(0,0,0,0.5);
-  z-index: 2000;
+  z-index: 2502;
 }
 
 .winner-overlay h1 {

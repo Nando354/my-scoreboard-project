@@ -78,8 +78,10 @@ function ScoreboardDisplay({ socket, gameState }) {
             case 'a': // Mapped from Play/Pause (Use lowercase for reliability)
             case 'A': 
                 if (socket && gameId) {
-                    socket.emit('switch_sides_command', gameId);
-              }
+                    // Detect if the phone is currently vertical
+                    const isPortrait = window.innerHeight > window.innerWidth;
+                    socket.emit('switch_sides_command', { gameId, isPortrait });
+                }
               return;
             default:
               return;
@@ -155,7 +157,7 @@ function ScoreboardDisplay({ socket, gameState }) {
       {/* 1. SWITCH OVERLAY */}
       {isSwitchPoint && !isGameOver && (
         <div className="switch-overlay">
-          <h1>SWITCH SIDES</h1>
+          <h2>SWITCH SIDES</h2>
           {/* <h1>{scoreA} - {scoreB}</h1> */}
           <h1>Total Points: {totalScore}</h1>
         </div>
@@ -213,13 +215,16 @@ function ScoreboardDisplay({ socket, gameState }) {
         </div>
         
         <div className="separator-line"></div>
-        
+
         {/* Global Controls */}
           {showButtons && (
             <div className="global-controls">
               <button 
                   className="swap-button"
-                  onClick={() => socket.emit('switch_sides_command', gameId)}
+                  onClick={() => {
+                      const isPortrait = window.innerHeight > window.innerWidth;
+                      socket.emit('switch_sides_command', { gameId, isPortrait });
+                  }}
                   disabled={status !== 'Live'}
               >
                   Swap Sides
