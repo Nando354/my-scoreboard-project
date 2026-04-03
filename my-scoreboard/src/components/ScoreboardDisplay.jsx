@@ -123,7 +123,11 @@ function ScoreboardDisplay({ socket, gameState }) {
 
   return (
     /* Update the className to dynamically add 'switch-alert' or 'game-over' */
-    <div className={`scoreboard-container ${isSwitchPoint && !isGameOver ? 'switch-alert' : ''} ${isGameOver ? 'game-over' : ''}`}>
+    <div className={`scoreboard-container 
+      ${isSwitchPoint && !isGameOver ? 'switch-alert' : ''} 
+      ${isGameOver ? 'game-over' : ''} 
+      ${!showButtons ? 'controls-hidden' : ''}
+    `}>
 
       {/* Status Bar / Game ID */}
       <header className={`status-bar status-${status.toLowerCase()}`}>

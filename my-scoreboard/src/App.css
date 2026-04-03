@@ -10,10 +10,10 @@
 
 .status-bar {
   color: rgba(30, 255, 64, 0.4);
-  font-size: .9rem;
+  font-size: .7rem;
   position: absolute;
-  top: 10px;
-  left: 13%;
+  top: 7px;
+  left: 8%;
   transform: translateX(-50%);
   z-index: 9999;
 }
@@ -30,7 +30,7 @@
 }
 
 /* Scoreboard */
-/* Hamburger Menu */
+/**** Hamburger Menu ****/
 .scoreboard-container {
   position: relative;
   min-height: 100vh;
@@ -40,7 +40,7 @@
 .hamburger-wrapper {
   position: absolute; /* Stays in the corner even if scrolling happens */
   top: 0px;
-  right: 20px;
+  right: 10px;
   z-index: 9999;   /* High enough to beat overlays */
 }
 
@@ -85,6 +85,27 @@
   white-space: nowrap;
 }
 
+/**** When buttons are hidden, make everything bigger! ****/
+/* Team Names */
+.controls-hidden .team-name-input {
+  font-size: 2.6rem; /* Increased from 4.5rem/8.5rem */
+  margin-bottom: 4rem;
+}
+/* Score Numbers */
+.controls-hidden .left-score-value,
+.controls-hidden .right-score-value {
+  font-size: 14rem; /* Massive scores for "Broadcast Mode" */
+  margin-top: -8rem;
+  margin-bottom: -8rem;
+}
+
+/* Adjust the grid spacing to use the extra vertical room */
+.controls-hidden .scores-grid {
+  height: 90vh; /* Fill the whole screen height */
+  justify-content: center;
+  gap: 2rem;
+}
+
 /* Scoreboard Continued*/
 .team-left, .team-left .left-score-value {
   color: #1eff40;
@@ -94,28 +115,23 @@
   color: #00f2ff;
 }
 
-.team-left {
-  font-size: 2rem;
+/* Buttons */
+.team-left, .team-right {
+  font-size: 1.5rem;
 }
 
-.left-team-title {
+/* Team Titles */
+.left-team-title, .right-team-title {
   margin-bottom: 0.2rem;
 } 
 
+/* Score Numbers */
 .left-score-value, .right-score-value {
-  font-size: 12rem;
-  margin-top: -5rem;
-  margin-bottom: -5rem;
+  font-size: 9.4rem;
+  margin-top: -4rem;
+  margin-bottom: -4rem;
   color: inherit; /* This tells the number to use the parent's color */
 }
-
-.team-right {
-  font-size: 2rem;
-}
-
-.right-team-title {
-  margin-bottom: 0.2rem;
-} 
 
 
 /* 1. Base style: Make it look like a Title, not a Box */
@@ -123,7 +139,7 @@
   background: transparent;
   border: 2px solid transparent; /* Keeps layout stable */
   color: #ece2e2;               /* Match your theme text color */
-  font-size: 4.5rem;            /* Make it big like an H1 */
+  font-size: 2.5rem;            /* Make it big like an H1 */
   font-weight: bold;
   text-transform: uppercase;
   text-align: center;
@@ -178,7 +194,7 @@
   font-size: 1.2rem;
   cursor: pointer;
   transition: background-color 0.3s ease;
-  margin-top: 1.5rem;
+  margin-top: 0rem;
   position: relative;
   z-index: 2501; /* Above the status bar and overlays */
 }
@@ -193,12 +209,12 @@
 
 .switch-alert h2 {
   font-size: 3rem;
-  margin-bottom: 12rem;
+  margin-bottom: 2rem;
 }
 
 .switch-alert h1 {
-  font-size: 6rem;
-  margin-top: 2rem;
+  font-size: 3rem;
+  margin-top: 8rem;
 }
 
 .switch-overlay {
@@ -219,30 +235,71 @@
 .game-over-theme {
   background-color: #ffd700 !important;
   color: #000 !important;
-  font-size: 10rem !important;
+  font-size: 12rem !important;
 }
 
 .winner-overlay {
   position: fixed;
   top: 50%;
-  left: 50%;
+  left: 47%;
   transform: translate(-50%, -50%);
   background: rgba(255, 255, 255, 0.2); /* 0.7 is 70% visible, 0.3 is 30%, etc. */
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(4px);
   color: rgb(246, 69, 46);
-  padding: 3rem;
+  padding: 3rem 3rem 9rem 3rem;
   border-radius: 30px;
   box-shadow: 0 0 100px rgba(0,0,0,0.5);
   z-index: 2502;
 }
 
 .winner-overlay h1 {
-  font-size: 12rem;
-  margin-bottom: 1rem;
+  font-size: 4rem;
+  margin-bottom: 4rem;
 }
 
-/* Phone & Landscape Mode: Flip to horizontal */
-@media screen and (min-width: 425px) and (orientation: landscape) {
+.reset-set-button {
+  position: fixed;
+  top: 65%;
+  left: 50%;
+  color: rgb(225, 20, 20);
+  border: none;
+  padding: 0.5rem 0.5rem;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  transform: translate(-50%, -50%);
+  background: rgba(222, 235, 42, 0.793); /* 0.7 is 70% visible, 0.3 is 30%, etc. */
+  backdrop-filter: blur(2px);
+}
+
+/* Buttons Hidden means team names and scores get bigger for portrait mode */
+/* @media screen and (min-width: 320px) and (orientation: portrait) {
+  .controls-hidden .left-score-value,
+  .controls-hidden .right-score-value {
+    font-size: 50vw;
+  }
+  .controls-hidden .team-name-input {
+    font-size: 17vw;
+  }
+  .controls-hidden .scores-grid {
+  height: 90vh; 
+  justify-content: center;
+  gap: 2rem;
+  }
+  .team-right {
+    padding-top: 4rem;
+  }
+
+  .switch-alert h1 {
+      font-size: 3rem;
+    }
+    .winner-overlay h1 {
+    font-size: 6rem;
+  }
+} */
+
+@media (orientation: landscape) and (min-height: 300px) {
+  
   .status-bar {
     color: rgba(30, 255, 64, 0.4);
     font-size: .9rem;
@@ -254,15 +311,102 @@
   }
 
   .hamburger-icon {
-    font-size: 1.5rem; /* Slightly smaller on landscape phones */
+    font-size: 1.5rem; 
   }
   .scores-grid {
-    flex-direction: row; /* Side-by-side (Horizontal) */
+    flex-direction: row; 
+    justify-content: space-around;
+    gap: 0rem;
+  }
+
+  .team-name-input {
+  font-size: 2.2rem;  
+  }
+
+  .left-score-value, .right-score-value {
+    font-size: 11rem; 
+  }
+
+  .swap-button {
+
+    margin-top: 0rem;
+  }
+
+  /* Beach Switch Sides Warning Color (Sun/Sand Orange) */
+  .switch-alert {
+    margin-bottom: 2rem;
+  }
+
+  .switch-alert h2 {
+    font-size: 2.5rem;
+    margin-bottom: 6rem;
+  }
+
+  .switch-alert h1 {
+    font-size: 2rem;
+    margin-top: 1rem;
+  }
+
+  .switch-overlay {
+    top: 40%;
+    left: 50%;
+    padding: 0rem;
+  }
+  /* 
+  .switch-alert h1 {
+    font-size: 1rem;
+    padding-bottom: 5rem;
+  } */
+
+  .menu-dropdown {
+    top: 20px; /* Adjusted for landscape */
+    right: 10px; /* Keep it near the corner */
+  }
+  /**** When buttons are hidden, make everything bigger! ****/
+  /* Team Names */
+  .controls-hidden .team-name-input {
+    font-size: 2.2rem; /* Increased from 4.5rem/8.5rem */
+    margin-bottom: 3rem;
+  }
+  /* Score Numbers */
+  .controls-hidden .left-score-value,
+  .controls-hidden .right-score-value {
+    font-size: 14rem; /* Massive scores for "Broadcast Mode" */
+    margin-top: -8rem;
+    margin-bottom: -8rem;
+  }
+
+  /* Adjust the grid spacing to use the extra vertical room */
+  .controls-hidden .scores-grid {
+    height: 90vh; /* Fill the whole screen height */
+    justify-content: center;
+    gap: 1rem;
+  }
+
+}
+
+/* Phone & Landscape Mode: Flip to horizontal */
+/* @media screen and (min-width: 425px) and (orientation: landscape) {
+  .status-bar {
+    color: rgba(30, 255, 64, 0.4);
+    font-size: .9rem;
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 9999;
+  }
+
+  .hamburger-icon {
+    font-size: 1.5rem; 
+  }
+  .scores-grid {
+    flex-direction: row; 
     justify-content: space-around;
     gap: 0rem;
   }
   
-  /* Make the scores a bit smaller in landscape so they fit */
+  
   .left-score-value, .right-score-value {
     font-size: 14rem; 
   }
@@ -276,7 +420,7 @@
     font-size: 3rem;
     margin-bottom: -2rem;
   }
-}
+} */
 
 @media screen and (min-width: 325px) and (orientation: portrait) {
   .switch-alert h1 {
@@ -284,55 +428,155 @@
   }
   .winner-overlay h1 {
   font-size: 6rem;
-}
+  }
 }
 
 @media screen and (min-width: 960px) and (orientation: landscape) {
+  .status-bar {
+    font-size: 2rem;
+    top: 90px;
+    left: 50%;
+  }
+  .hamburger-wrapper {
+    top: 10px;
+    right: 52px;
+  }
+  .hamburger-icon {
+    font-size: 4.5rem; 
+  }
   .scores-grid {
     flex-direction: row; /* Side-by-side (Horizontal) */
     justify-content: space-around;
   }
-  
-  /* Make the scores a bit smaller in landscape so they fit */
-  .left-score-value, .right-score-value {
-    font-size: 30rem; 
-  }
-
   .team-name-input {
-  font-size: 8.5rem; 
+  font-size: 5rem; 
+  margin-top: 4rem;
   }
-  .right-score-value {
-  margin-top: -10rem;
-  margin-bottom: -5rem;
+  /* Score Values */
+  .left-score-value, .right-score-value {
+    font-size: 28rem; 
+    margin-top: -10rem;
+    margin-bottom: -5rem;
+  }
+  .control-buttons {
+    font-size: 2.5rem;
+    margin-top: 0rem;
+  }
+  .swap-button {
+    font-size: 2.5rem;
+  }
+  /**** When buttons are hidden, make everything bigger! ****/
+  /* Team Names */
+  .controls-hidden .team-name-input {
+    font-size: 5.2rem; /* Increased from 4.5rem/8.5rem */
+    margin-bottom: 3rem;
+  }
+  /* Score Numbers */
+  .controls-hidden .left-score-value,
+  .controls-hidden .right-score-value {
+    font-size: 28rem; /* Massive scores for "Broadcast Mode" */
+    margin-top: -10rem;
+    margin-bottom: -8rem;
   }
 
-  .left-score-value {
-  margin-top: -10rem;
-  margin-bottom: -5rem;
+  /* Adjust the grid spacing to use the extra vertical room */
+  .controls-hidden .scores-grid {
+    height: 90vh; /* Fill the whole screen height */
+    justify-content: center;
+    gap: 0rem;
+  }
+  .controls-hidden .status-bar {
+    font-size: 2rem;
+    top: 320px;
+    left: 50%;
+  }
+  .controls-hidden .hamburger-wrapper {
+    top: 20px;
+    right: 52px;
+  }
+    .game-over-theme {
+    font-size: 12rem !important;
+  }
+
+  .winner-overlay {
+    position: fixed;
+    top: 50%;
+    left: 47%;
+    padding: 3rem 3rem 9rem 3rem;
+  }
+
+  .winner-overlay h1 {
+    font-size: 8rem;
+    margin-bottom: 4rem;
+  }
+
+  .reset-set-button {
+    top: 75%;
+    left: 50%;
+    padding: 0.5rem 0.5rem;
+    font-size: 1.5rem;
   }
 }
 
 @media screen and (min-width: 711px) and (orientation: portrait) {
-  /* .scores-grid {
-    flex-direction: row; 
-    justify-content: space-around;
-  } */
-  
-  /* Make the scores a bit smaller in landscape so they fit */
-  .left-score-value, .right-score-value {
-    font-size: 25rem; 
+
+  .status-bar {
+    font-size: 2rem;
+    top: 25px;
+    left: 10%;
+  }
+  .hamburger-wrapper {
+    top: 10px;
+    right: 12px;
+  }
+  .hamburger-icon {
+    font-size: 3.5rem; 
+  }
+  /* Score Values */
+  .right-score-value, .left-score-value {
+    font-size: 22rem; 
+  }
+
+  .control-buttons {
+    font-size: 2rem;
+    margin-top: -5rem;
+  }
+
+  .swap-button {
+    font-size: 2.1rem;
   }
 
   .team-name-input {
-  font-size: 8.5rem; 
+    font-size: 7rem; 
   }
-  .right-score-value {
-  margin-top: -10rem;
-  margin-bottom: -5rem;
+  .right-score-value, .left-score-value {
+    margin-top: -10rem;
+    margin-bottom: -5rem;
+  }
+  .team-right {
+    padding-bottom: 4rem;
+  }
+  /* Victory Theme (Gold/Celebration) */
+  .game-over-theme {
+    font-size: 12rem !important;
   }
 
-  .left-score-value {
-  margin-top: -10rem;
-  margin-bottom: -5rem;
+  .winner-overlay {
+    position: fixed;
+    top: 50%;
+    left: 47%;
+    padding: 3rem 3rem 9rem 3rem;
+  }
+
+  .winner-overlay h1 {
+    font-size: 8rem;
+    margin-bottom: 4rem;
+  }
+
+  .reset-set-button {
+    top: 75%;
+    left: 50%;
+    padding: 0.5rem 0.5rem;
+    font-size: 1.5rem;
   }
 }
