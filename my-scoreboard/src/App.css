@@ -484,7 +484,8 @@ html, body {
   /* Score Numbers */
   .controls-hidden .left-score-value,
   .controls-hidden .right-score-value {
-    font-size: 38rem; /* Massive scores for "Broadcast Mode" */
+    font-weight: bold;
+    font-size: 32rem; /* Massive scores for "Broadcast Mode" */
     margin-top: -18rem;
     margin-bottom: -15rem;
   }
