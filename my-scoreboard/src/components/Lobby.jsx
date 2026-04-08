@@ -21,7 +21,7 @@ function Lobby({ socket, setGameId, currentStatus }) {
     setLoading(true);
     setError('');
 
-    // Emit the request to the server and wait for the callback (the new ID)
+    // Emit the request to the server and wait for the callback (the new ID) from the server
     socket.emit('request_new_game', ({ gameId }) => {
       setLoading(false);
       
