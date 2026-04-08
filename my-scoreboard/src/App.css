@@ -597,15 +597,16 @@ html, body {
   /**** When buttons are hidden, make everything bigger! ****/
   /* Team Names */
   .controls-hidden .team-name-input {
-    font-size: 6.6rem; /* Increased from 4.5rem/8.5rem */
-    margin-bottom: 3rem;
+    font-size: 7.5rem; /* Increased from 4.5rem/8.5rem */
+    margin-bottom: 1rem;
   }
   /* Score Numbers */
   .controls-hidden .left-score-value,
   .controls-hidden .right-score-value {
-    font-size: 25rem; /* Massive scores for "Broadcast Mode" */
-    margin-top: -12rem;
-    margin-bottom: -10rem;
+    font-weight: bold;
+    font-size: 32rem; /* Massive scores for "Broadcast Mode" */
+    margin-top: -13rem;
+    margin-bottom: -19rem;
   }
 
   /* Adjust the grid spacing to use the extra vertical room */
